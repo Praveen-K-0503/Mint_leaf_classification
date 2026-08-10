@@ -41,7 +41,34 @@ class CustomMintCNN(nn.Module):
         x = self.classifier(x)
         return x
 
-# Master Model Registry Metadata Table for 25 Architectures
+# Custom Lightweight Vision Transformer (DeiT-Tiny Style Architecture)
+class DeiTTinyCustom(nn.Module):
+    """
+    Lightweight Vision Transformer (DeiT-Tiny style): 5.7M parameters.
+    Embedding Dim: 192, Depth: 12, Heads: 3, Patch Size: 16x16.
+    """
+    def __init__(self, img_size=224, patch_size=16, in_chans=3, num_classes=6, embed_dim=192, depth=12, num_heads=3):
+        super().__init__()
+        num_patches = (img_size // patch_size) ** 2
+        self.patch_embed = nn.Conv2d(in_chans, embed_dim, kernel_size=patch_size, stride=patch_size)
+        self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
+        self.pos_embed = nn.Parameter(torch.zeros(1, num_patches + 1, embed_dim))
+        
+        encoder_layer = nn.TransformerEncoderLayer(d_model=embed_dim, nhead=num_heads, dim_feedforward=embed_dim*4, activation='gelu', batch_first=True)
+        self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=depth)
+        self.head = nn.Linear(embed_dim, num_classes)
+
+    def forward(self, x):
+        B = x.shape[0]
+        x = self.patch_embed(x).flatten(2).transpose(1, 2)
+        cls_tokens = self.cls_token.expand(B, -1, -1)
+        x = torch.cat((cls_tokens, x), dim=1)
+        x = x + self.pos_embed
+        x = self.transformer(x)
+        x = x[:, 0]  # CLS token output
+        return self.head(x)
+
+# Master Model Registry Metadata Table for 25 Distinct Architectures
 MODEL_SUITE_REGISTRY = {
     # Family A: Classical CNN Architectures
     "M01_resnet18": {"name": "ResNet-18", "family": "Family A — Classical CNN", "default_size": 224, "builder": "resnet18"},
@@ -67,7 +94,7 @@ MODEL_SUITE_REGISTRY = {
 
     # Family D: Vision Transformer (ViT) Architectures
     "M17_vit_b_16": {"name": "ViT-Base/16", "family": "Family D — Vision Transformer", "default_size": 224, "builder": "vit_b_16"},
-    "M18_deit_tiny": {"name": "DeiT-Tiny", "family": "Family D — Vision Transformer", "default_size": 224, "builder": "deit_tiny"},
+    "M18_deit_tiny": {"name": "DeiT-Tiny (5.7M Params)", "family": "Family D — Vision Transformer", "default_size": 224, "builder": "deit_tiny"},
     "M19_swin_t": {"name": "Swin Transformer-Tiny", "family": "Family D — Vision Transformer", "default_size": 224, "builder": "swin_t"},
     "M20_swin_s": {"name": "Swin Transformer-Small", "family": "Family D — Vision Transformer", "default_size": 224, "builder": "swin_s"},
 
@@ -84,7 +111,6 @@ def build_model(model_name="M01_resnet18", num_classes=6, pretrained=True):
     Master Model Factory supporting all 25 distinct architectures.
     """
     key = model_name
-    # Handle alias lookup
     if key not in MODEL_SUITE_REGISTRY:
         for k, info in MODEL_SUITE_REGISTRY.items():
             if model_name.lower() in k.lower() or model_name.lower() in info["builder"].lower():
@@ -167,13 +193,8 @@ def build_model(model_name="M01_resnet18", num_classes=6, pretrained=True):
         model.heads.head = nn.Linear(model.heads.head.in_features, num_classes)
 
     elif builder_name == "deit_tiny":
-        # Using Swin or ResNet as fallback if deit not in base torchvision
-        try:
-            model = models.vit_b_16(weights=weights if pretrained else None)
-            model.heads.head = nn.Linear(model.heads.head.in_features, num_classes)
-        except Exception:
-            model = models.resnet18(weights=weights if pretrained else None)
-            model.fc = nn.Linear(model.fc.in_features, num_classes)
+        # Distinct 5.7M parameter DeiT-Tiny architecture
+        model = DeiTTinyCustom(num_classes=num_classes)
 
     elif builder_name == "swin_t":
         model = models.swin_t(weights=weights if pretrained else None)
@@ -204,16 +225,12 @@ def build_model(model_name="M01_resnet18", num_classes=6, pretrained=True):
         model = CustomMintCNN(num_classes=num_classes)
 
     else:
-        # Default fallback
         model = models.resnet18(weights=weights if pretrained else None)
         model.fc = nn.Linear(model.fc.in_features, num_classes)
 
     return model
 
 def get_model_metrics(model, device="cpu", input_size=(3, 224, 224)):
-    """
-    Computes total parameters, trainable parameters, and estimated model size in MB.
-    """
     total_params = sum(p.numel() for p in model.parameters())
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     size_mb = (total_params * 4) / (1024 * 1024)
