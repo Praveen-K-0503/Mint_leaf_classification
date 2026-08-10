@@ -1,0 +1,85 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+*-checkpoint.ipynb
+
+# Datasets (Keep structure, ignore large files)
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/external/*
+!data/external/.gitkeep
+
+# Models & Weights (Ignore heavy checkpoint files)
+models/*.pth
+models/*.pt
+models/*.h5
+models/*.onnx
+models/*.bin
+models/*.ckpt
+
+# Outputs
+outputs/predictions/*
+!outputs/predictions/.gitkeep
+outputs/visualizations/*
+!outputs/visualizations/.gitkeep
+outputs/reports/*
+!outputs/reports/.gitkeep
+
+# Environment & Secret variables
+.env
+.env.local
+.env.*.local
+*.pem
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Node / Frontend dependencies (if applicable)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.next/
+dist/
