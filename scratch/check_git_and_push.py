@@ -27,10 +27,10 @@ for candidate in git_candidates:
 if git_bin:
     project_dir = r"f:\Praveen 3rd year-AI&DS\mint-leaf-ai"
     
-    print("\n--- 🚀 Executing Git Commit & Push for Fixed Notebooks ---")
+    print("\n--- 🚀 Executing Git Commit & Push for %pip Magic Notebooks ---")
     commands = [
         [git_bin, "add", "."],
-        [git_bin, "commit", "-m", "Fix missing module dependencies and auto-installer logic in all 4 notebooks"],
+        [git_bin, "commit", "-m", "Inject %pip magic into Cell 1 of all notebooks"],
         [git_bin, "push", "origin", "main"]
     ]
     
