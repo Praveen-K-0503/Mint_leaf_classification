@@ -27,12 +27,10 @@ for candidate in git_candidates:
 if git_bin:
     project_dir = r"f:\Praveen 3rd year-AI&DS\mint-leaf-ai"
     
-    repo_url = "https://Praveen-K-0503@github.com/Praveen-K-0503/Mint_leaf_classification.git"
-    
-    print("\n--- 🚀 Executing Git Commit & Push for Step 3 ---")
+    print("\n--- 🚀 Executing Git Commit & Push for Step 4 ---")
     commands = [
         [git_bin, "add", "."],
-        [git_bin, "commit", "-m", "Step 3: Dataset Taxonomy & Disease Data Gap Analysis Module"],
+        [git_bin, "commit", "-m", "Step 4: Disease Dataset Discovery & Acquisition Inventory Module"],
         [git_bin, "push", "origin", "main"]
     ]
     
