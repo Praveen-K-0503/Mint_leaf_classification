@@ -1,0 +1,17 @@
+{
+    "model_name": "resnet18",
+    "architecture_family": "Convolutional Neural Network (CNN)",
+    "pretrained": true,
+    "input_resolution": 224,
+    "num_classes": 6,
+    "optimizer": "adamw",
+    "learning_rate": 0.0003,
+    "scheduler": "cosine",
+    "loss": "cross_entropy",
+    "batch_size": 32,
+    "epochs": 3,
+    "use_amp": true,
+    "patience": 3,
+    "checkpoint_path": "models/checkpoints/resnet18_baseline.pt",
+    "history_path": "outputs/reports/training_dataset/resnet18_history.json"
+}
