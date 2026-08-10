@@ -27,10 +27,10 @@ for candidate in git_candidates:
 if git_bin:
     project_dir = r"f:\Praveen 3rd year-AI&DS\mint-leaf-ai"
     
-    print("\n--- 🚀 Executing Git Commit & Push for Step 5 ---")
+    print("\n--- 🚀 Executing Git Commit & Push for Fixed Notebooks ---")
     commands = [
         [git_bin, "add", "."],
-        [git_bin, "commit", "-m", "Step 5: Controlled Dataset Acquisition and Curation Module"],
+        [git_bin, "commit", "-m", "Fix missing module dependencies and auto-installer logic in all 4 notebooks"],
         [git_bin, "push", "origin", "main"]
     ]
     
