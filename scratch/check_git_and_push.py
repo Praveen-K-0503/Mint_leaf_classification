@@ -3,18 +3,14 @@ import subprocess
 import sys
 from pathlib import Path
 
-# Add standard Git paths to OS environment PATH
+# Add standard Git path to PATH
 git_cmd_dir = r"C:\Program Files\Git\cmd"
 if git_cmd_dir not in os.environ.get("PATH", ""):
     os.environ["PATH"] = git_cmd_dir + os.pathsep + os.environ.get("PATH", "")
 
 git_candidates = [
     r"C:\Program Files\Git\cmd\git.exe",
-    "git",
-    r"C:\Program Files\Git\bin\git.exe",
-    r"C:\Program Files (x86)\Git\cmd\git.exe",
-    os.path.expanduser(r"~\AppData\Local\Programs\Git\cmd\git.exe"),
-    os.path.expanduser(r"~\AppData\Local\GitHubDesktop\bin\git.exe"),
+    "git"
 ]
 
 git_bin = None
@@ -28,25 +24,16 @@ for candidate in git_candidates:
     except Exception:
         continue
 
-if not git_bin:
-    print("❌ Git executable not found. Please restart your terminal or VS Code.")
-else:
-    repo_url = "https://github.com/Praveen-K-0503/Mint_leaf_classification.git"
+if git_bin:
     project_dir = r"f:\Praveen 3rd year-AI&DS\mint-leaf-ai"
     
-    print("\n--- ⚙️ Setting Up Git Configuration ---")
-    subprocess.run([git_bin, "config", "user.name", "Praveen K"], cwd=project_dir)
-    subprocess.run([git_bin, "config", "user.email", "praveen@mintleaf.ai"], cwd=project_dir)
+    repo_url = "https://Praveen-K-0503@github.com/Praveen-K-0503/Mint_leaf_classification.git"
     
-    print("\n--- 🚀 Executing Git Workflow ---")
+    print("\n--- 🚀 Executing Git Commit & Push for Step 3 ---")
     commands = [
-        [git_bin, "init"],
-        [git_bin, "branch", "-M", "main"],
-        [git_bin, "remote", "remove", "origin"],
-        [git_bin, "remote", "add", "origin", repo_url],
         [git_bin, "add", "."],
-        [git_bin, "commit", "-m", "Step 1 & Step 2: Mint Leaf AI foundation, dataset audit module and professional README"],
-        [git_bin, "push", "-u", "origin", "main"]
+        [git_bin, "commit", "-m", "Step 3: Dataset Taxonomy & Disease Data Gap Analysis Module"],
+        [git_bin, "push", "origin", "main"]
     ]
     
     for cmd in commands:
