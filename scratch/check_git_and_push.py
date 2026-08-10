@@ -27,10 +27,10 @@ for candidate in git_candidates:
 if git_bin:
     project_dir = r"f:\Praveen 3rd year-AI&DS\mint-leaf-ai"
     
-    print("\n--- 🚀 Executing Git Commit & Push for Refined Code Block ---")
+    print("\n--- 🚀 Executing Git Commit & Push for Step 5 Re-Execution & Audit ---")
     commands = [
         [git_bin, "add", "."],
-        [git_bin, "commit", "-m", "Apply full self-contained refined block to Notebook 3 report exporter"],
+        [git_bin, "commit", "-m", "Re-execute Step 5, perform 9 consistency audits, and fix 12-image Wilt count breakdown"],
         [git_bin, "push", "origin", "main"]
     ]
     
