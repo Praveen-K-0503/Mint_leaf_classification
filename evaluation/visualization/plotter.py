@@ -1,11 +1,12 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+import numpy as np
 from pathlib import Path
 
 def plot_confusion_matrix(cm_df, save_path=None, title="Model Confusion Matrix"):
     """
-    Plots Seaborn heatmap for confusion matrix.
+    Plots raw count Seaborn heatmap for confusion matrix.
     """
     plt.figure(figsize=(10, 8))
     sns.heatmap(cm_df, annot=True, fmt='d', cmap='Greens', cbar=False, linewidths=0.5)
@@ -20,6 +21,31 @@ def plot_confusion_matrix(cm_df, save_path=None, title="Model Confusion Matrix")
         Path(save_path).parent.mkdir(parents=True, exist_ok=True)
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
         print(f"📊 Saved Confusion Matrix Heatmap: {save_path}")
+    plt.close()
+
+def plot_normalized_confusion_matrix(cm_df, save_path=None, title="Normalized Confusion Matrix (Recall)"):
+    """
+    Plots row-normalized (recall) Seaborn heatmap for confusion matrix.
+    """
+    plt.figure(figsize=(10, 8))
+    cm_arr = cm_df.values.astype('float')
+    row_sums = cm_arr.sum(axis=1, keepdims=True)
+    row_sums[row_sums == 0] = 1.0  # Avoid zero division
+    norm_cm = cm_arr / row_sums
+    norm_df = pd.DataFrame(norm_cm, index=cm_df.index, columns=cm_df.columns)
+    
+    sns.heatmap(norm_df, annot=True, fmt='.2%', cmap='Blues', cbar=True, linewidths=0.5, vmin=0.0, vmax=1.0)
+    plt.title(title, fontsize=14, fontweight='bold')
+    plt.xlabel('Predicted Label', fontsize=12)
+    plt.ylabel('True Label', fontsize=12)
+    plt.xticks(rotation=45, ha='right')
+    plt.yticks(rotation=0)
+    plt.tight_layout()
+    
+    if save_path:
+        Path(save_path).parent.mkdir(parents=True, exist_ok=True)
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        print(f"📊 Saved Normalized Confusion Matrix Heatmap: {save_path}")
     plt.close()
 
 def plot_training_history(history, save_path=None, title="Training & Validation History"):
