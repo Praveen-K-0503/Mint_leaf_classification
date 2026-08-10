@@ -27,10 +27,10 @@ for candidate in git_candidates:
 if git_bin:
     project_dir = r"f:\Praveen 3rd year-AI&DS\mint-leaf-ai"
     
-    print("\n--- 🚀 Executing Git Commit & Push for Step 8C Final Leakage Gate ---")
+    print("\n--- 🚀 Executing Git Commit & Push for Step 8D ---")
     commands = [
         [git_bin, "add", "."],
-        [git_bin, "commit", "-m", "Step 8C Final Leakage Gate Verification Module"],
+        [git_bin, "commit", "-m", "Step 8D: Specimen & Provenance Independence Resolution Module"],
         [git_bin, "push", "origin", "main"]
     ]
     
